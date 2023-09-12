@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import './globals.css';
 import MenuBar from './MenuBar';
+import Header from './Header';
 
 export default function RootLayout({ children }) {
   const [posts, setPosts] = useState([]); // useState를 컴포넌트 내부로 이동
@@ -26,6 +27,8 @@ export default function RootLayout({ children }) {
   return (
     <html>
       <body>
+        <Header/>
+        
         {children}
         <MenuBar />
       </body>

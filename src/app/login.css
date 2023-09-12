@@ -1,0 +1,23 @@
+.loginArea{
+    margin: 0 auto;
+    width: 400px;
+    text-align: center;
+    border: 1px solid rgb(219, 219, 219);
+    margin-top: 150px;
+}
+.h2{
+    font-size: 55px;
+}
+.loginBox2 input{
+    width: 80%;
+    height: 40px;
+    margin: 5px;
+    background-color: rgb(250, 250, 250);
+    border: 1px solid rgb(219, 219, 219)
+}
+.loginGo{
+    margin-top: 100px;
+    margin-bottom: 8px;
+    border-top: 1px solid rgb(219, 219, 219);
+    padding: 20px;
+}

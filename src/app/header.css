@@ -1,0 +1,51 @@
+/* header.css */
+
+.h1{
+    margin-bottom: 0px;
+    font-size: 36px;
+    font-weight: bold;
+}
+.h1:hover{
+    cursor: pointer;
+}
+a{
+    text-decoration: none;
+    color: #555;
+}
+.headerIcon {
+    font-size: 36px; 
+    float: right;
+    color: #555;
+    margin: 10px;
+  }
+  .menu-container {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+  }
+  
+  .menu-container.visible {
+    opacity: 1;
+    max-height: 300px; /* 적절한 높이로 조절하세요 */
+  }
+  
+  .icon-container.menu-visible {
+    margin-top: 10px; /* 필요한 만큼 조절하세요 */
+    transition: margin-top 0.3s ease;
+  }
+  
+  .listIcon{
+    font-size: 30px; 
+    color: #555;
+    margin-left: 10px;
+    
+  }
+  .headerList{
+    color: #555;
+    list-style: none;
+    width: 150px;
+    text-align: center;
+    font-weight: bold;
+    
+  }

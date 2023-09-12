@@ -59,10 +59,13 @@ const ActionButton = styled.button`
   margin-right: 15px;
   cursor: pointer;
 `;
+const Content = styled.div`
+  font-size: 20px;
+  padding : 10px;
+`;
 
 
 export default function Home(){
-
   const [posts, setPosts] = useState([]);
 
   // Replace this function with a real API call
@@ -77,6 +80,7 @@ export default function Home(){
             avatar: 'https://via.placeholder.com/32',
           },
           imageUrl: 'https://i.namu.wiki/i/R0AhIJhNi8fkU2Al72pglkrT8QenAaCJd1as-d_iY6MC8nub1iI5VzIqzJlLa-1uzZm--TkB-KHFiT-P-t7bEg.webp',
+          isLiked: false,
         },
         {
           id: 2,
@@ -85,6 +89,7 @@ export default function Home(){
             avatar: 'https://via.placeholder.com/32',
           },
           imageUrl: 'https://health.chosun.com/site/data/img_dir/2023/04/04/2023040401590_0.jpg',
+          isLiked: false,
         },
         {
           id: 3,
@@ -93,6 +98,7 @@ export default function Home(){
             avatar: 'https://via.placeholder.com/32',
           },
           imageUrl: 'https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/32E9/image/BA2Qyx3O2oTyEOsXe2ZtE8cRqGk.JPG',
+          isLiked: false,
         },
         
       ];
@@ -102,6 +108,16 @@ export default function Home(){
 
     fetchPosts();
   }, []);
+
+  // 각 게시물의 하트 상태를 토글하는 함수
+  const toggleLike = (postId) => {
+    setPosts((prevState) =>
+      prevState.map((post) =>
+        post.id === postId ? { ...post, isLiked: !post.isLiked } : post
+      )
+    );
+  };
+
   return (
     <div>
       <Feed>
@@ -115,10 +131,15 @@ export default function Home(){
             </PostHeader>
             <PostImage src={post.imageUrl} alt="Post" />
             <PostActions>
-              <ActionButton>❤️</ActionButton>
+              <ActionButton onClick={() => toggleLike(post.id)}> {post.isLiked ? '❤️' : '🤍'}</ActionButton>
               <ActionButton>💬</ActionButton>
               <ActionButton>🔗</ActionButton>
             </PostActions>
+            <Content>
+              <div><strong>좋아요 7개</strong></div>
+              <strong>cesaryanolja</strong>
+              <span>　hardcoding</span>
+            </Content>
           </Post>
         ))}
       </Feed>

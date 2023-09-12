@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { FiHome, FiSearch, FiPlusSquare, FiHeart, FiUser } from 'react-icons/fi';
+import { LuDog } from "react-icons/lu"; // 강아쥐
 
 const MenuBarContainer = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const MenuBarContainer = styled.div`
 `;
 
 const MenuIcon = styled.div`
-  font-size: 24px;
+  font-size: 36px;
   color: #555;
 `;
 
@@ -39,12 +40,12 @@ const MenuBar = () => {
             <FiPlusSquare />
         </MenuIcon>
       </a>
-      <a href="/heart">
+      <a href="/freePost">
         <MenuIcon>
-            <FiHeart />
+          <LuDog/>
         </MenuIcon>
       </a>
-      <a href="/api/user">
+      <a href="/user">
         <MenuIcon>
             <FiUser />
         </MenuIcon>
