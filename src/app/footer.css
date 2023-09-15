@@ -1,0 +1,18 @@
+/* footer.css  */
+
+.footer {
+  background-color: rgba(255, 255, 255); 
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.footer a{
+  margin: 10px;
+}
+.footer h4{
+  color: #aaa;
+}

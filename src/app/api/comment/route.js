@@ -8,6 +8,10 @@
 import { NextResponse } from 'next/server'
 import db from '../../db';
 
+import { promises as fs } from 'fs';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+
 export async function GET(req) {  // SELECT
 
   // console.log("req.query ==> ", req.query);
@@ -16,7 +20,7 @@ export async function GET(req) {  // SELECT
   console.log("req.query ==> ", param1);
   try {
     const results = await new Promise((resolve, reject) => {
-      db.query('SELECT * FROM test', (err, results) => {
+      db.query('SELECT * FROM post p INNER JOIN COMMENT c ON c.P_NO = p.P_NO ORDER BY C_NO ASC;', (err, results) => {
         if (err) {
           console.error('데이터를 가져오는 중 오류 발생:', err);
           reject(err);
@@ -37,12 +41,13 @@ export async function POST(req) { // INSERT
   try {
     // 클라이언트로부터 전송된 JSON 데이터를 파싱합니다.
     const requestData = await req.json();
+    
 
     // 데이터베이스에 데이터를 삽입 또는 업데이트하는 작업을 수행합니다.
     // 예시: 데이터베이스에 "test" 테이블에 데이터 추가
     const insertResult = await new Promise((resolve, reject) => {
-      db.query( 'INSERT INTO test (email, pw, name, name2) VALUES (?, ?, ?, ?)',
-  [requestData.email, requestData.pw, requestData.name, requestData.name2],
+      db.query( 'INSERT INTO comment (U_ID, C_ID, C_COMMENT, P_NO) VALUES (?, ?, ?, ?)',
+  [requestData.uId, requestData.cId, requestData.comment, requestData.pNo ],
   (err, results) => {
         if (err) {
           console.error('데이터 삽입 중 오류 발생:', err);

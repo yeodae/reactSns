@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import MenuBar from '../MenuBar';
+import Header from '../Header';
 
 const Container = styled.div`
   padding: 20px;
@@ -68,6 +69,7 @@ export default function Heart(){
 
   return (
     <div>
+      <Header/>
       <Container>
         <ActivityTabs>
           <Tab

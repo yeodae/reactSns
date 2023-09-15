@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import MenuBar from '../MenuBar';
+import Header from '../Header';
 import InfiniteScroll from 'react-infinite-scroll-component';
 const Container = styled.div`
   padding: 20px;
@@ -68,6 +69,7 @@ export default function Search(){
 
   return (
     <div>
+      <Header/>
       <Container>
         <SearchBar
           type="text"

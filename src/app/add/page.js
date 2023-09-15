@@ -1,8 +1,10 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import styled from '@emotion/styled';
 import MenuBar from '../MenuBar';
+import Header from '../Header';
 import ReactCrop from 'react-image-crop';
+import { useRouter } from 'next/navigation';
 import 'react-image-crop/dist/ReactCrop.css';
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 const Container = styled.div`
@@ -20,7 +22,16 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
 `;
-
+const Textarea = styled.textarea`
+  display: block;
+  width: 100%;
+  height : 150px;
+  padding: 12px 20px;
+  margin: 0 0 20px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
 const Label = styled.label`
   display: block;
   margin-bottom: 5px;
@@ -68,15 +79,33 @@ const SocialIcon = styled.div`
     background-color: #4c70ba;
   }
 `;
+const PreviewImage = styled.img` 
+  width : 300px;
+  height: 500px;
+  margin-top: 10px;
+`; // 사진미리보기
+
 export default function PlusSquare(){
   const [file, setFile] = useState(null);
   const [crop, setCrop] = useState({ aspect: 1 });
   const [croppedImage, setCroppedImage] = useState(null);
+  const [uId, setUId] = useState('');
+  const router = useRouter();
 
+  useEffect(() => {
+    const savedUId = sessionStorage.getItem('uId');
+    setUId(savedUId);
+    console.log("uId ==>",uId);
+  }, []);// 세션값 추가 코드 끝
   const onFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
-      reader.addEventListener('load', () => setFile(reader.result));
+      reader.addEventListener('load', () => {
+        console.log("reader==>", reader);
+        setFile(e.target.files[0]);
+        // 이미지 파일을 미리보기로 설정
+        setCroppedImage(reader.result);
+      });
       reader.readAsDataURL(e.target.files[0]);
     }
   };
@@ -91,25 +120,78 @@ export default function PlusSquare(){
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Implement the rest of the form submission logic here
-  };
 
   const handleSocialShare = (platform) => {
     // Implement social sharing logic here
   };
   return(
     <div>
+      <Header/>
       <Container>
-        <Form onSubmit={handleSubmit}>
-          <Label htmlFor="file-input">Upload a photo or video:</Label>
-          <Input
-            type="file"
-            id="file-input"
-            accept="image/*,video/*"
-            onChange={onFileChange}
+        <Form onSubmit={async (e)=>{
+          e.preventDefault();
+          var title = e.target.title.value;
+          var content = e.target.content.value;
+          var tag = e.target.tag.value;
+          var userId = uId;
+         
+                 // 파일 테이블 업로드
+                 console.log("file ==> ", file);
+        const formData = new FormData(); // FormData 객체 생성
+        if (file !== null) {
+          formData.append('title', title);
+          formData.append('content', content);        
+          formData.append('tag', tag);          
+          formData.append('userId', userId);                  
+          formData.append('file', file);        
+        }
+        try {
+          const response = await fetch('/api/post', {
+            method: 'POST',
+            body: formData
+          });
+    
+          if (!response.ok) {
+            throw new Error('서버 응답이 실패했습니다.');
+          }else{
+            alert('게시물 등록이 완료되었습니다.');
+            router.push('/home'); // 로그인 페이지로 이동
+            return response.json();
+          }
+    
+          const data = await response.json();
+          console.log('서버 응답:', data);
+        } catch (error) {
+          console.error('POST 요청 중 오류 발생:', error);
+        }
+        }}>
+
+            <Label>글 제목
+            <Input type="text" name="title" id="caption" placeholder="Write a Title" /></Label>
+            <Label>글 내용
+            <Textarea
+                     name="content"
+                     type="text"
+                     id="location"
+                     placeholder="Write a Content"
+                   /></Label>
+            <Label>HashTag
+            <Input
+                     name="tag"
+                     type="text"
+                     id="tags"
+                     placeholder="Tag users by their username..."
+                   /></Label>
+
+            <Label  Label htmlFor="file-input">Upload a photo or video:</Label>
+            <Input
+              type="file"
+              id="file-input"
+              accept="image/*,video/*"
+              onChange={onFileChange}
+              
             />
+             {croppedImage && <PreviewImage src={croppedImage} alt="Preview" />}
             {file && (
             <ReactCrop
             src={file}
@@ -119,22 +201,11 @@ export default function PlusSquare(){
             onComplete={onCropComplete}
             />
             )}
-            <Label htmlFor="caption">Caption:</Label>
-            <Input type="text" id="caption" placeholder="Write a caption..." />
-            <Label htmlFor="location">Location:</Label>
-            <Input
-                     type="text"
-                     id="location"
-                     placeholder="Add a location..."
-                   />
-            <Label htmlFor="tags">Tag Users:</Label>
-            <Input
-                     type="text"
-                     id="tags"
-                     placeholder="Tag users by their username..."
-                   />
+            
             <Button type="submit">Post</Button>
             </Form>
+
+            
             <SocialShare>
             <a href="https://www.facebook.com/">
                 <SocialIcon onClick={() => handleSocialShare('facebook')}>

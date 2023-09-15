@@ -1,6 +1,7 @@
 "use client"
 import Image from 'next/image'
 import { BiErrorCircle } from "react-icons/bi";
+import Footer from '../footer';
 import '../login.css';
 export default function pwFind() {
   return (
@@ -26,6 +27,7 @@ export default function pwFind() {
             계정이 없으신가요? <a href='/join'>회원가입</a>
           </div>
         </div>
+        <Footer/>
       </div>
    </form>
   )

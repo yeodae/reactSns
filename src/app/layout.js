@@ -6,8 +6,10 @@ import Header from './Header';
 
 export default function RootLayout({ children }) {
   const [posts, setPosts] = useState([]); // useState를 컴포넌트 내부로 이동
+ 
 
   useEffect(() => {
+
     fetch('/api/user')
       .then((response) => {
         if (!response.ok) {
@@ -16,7 +18,7 @@ export default function RootLayout({ children }) {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log("layout/user ==>",data);
         setPosts(data);
       })
       .catch((error) => {
@@ -27,10 +29,9 @@ export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <Header/>
         
         {children}
-        <MenuBar />
+        
       </body>
     </html>
   );

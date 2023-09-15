@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import MenuBar from '../MenuBar';
+import Header from '../Header';
+import Modal from './Modal';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Container = styled.div`
@@ -25,18 +27,19 @@ const Grid = styled.div`
 `;
 
 const GridItemContainer = styled.div`
-  position: relative; /* GridItem 내부에 위치를 상대적으로 설정 */
+  position: relative;
   cursor: pointer;
   transition: opacity 0.3s;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
 `;
-
 
 const GridItem = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
 `;
-
 
 const ImageCaption = styled.div`
   position: absolute;
@@ -49,31 +52,82 @@ const ImageCaption = styled.div`
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
-  opacity: 0;
+  opacity: ${props => (props.isHovered ? 1 : 0)};
   transition: opacity 0.3s;
 `;
 
-const ImageWithCaption = ({ src, alt, caption }) => {
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background-color: #fff;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  padding: 20px;
+  border-radius: 4px;
+  position: relative;
+`;
+
+const ModalCloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+`;
+
+const ModalImage = styled.img`
+  width: 100%;
+  height: auto;
+`;
+
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ImageWithCaption = ({ src, alt, caption, openModal }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <GridItemContainer
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => openModal(src)} // 이미지 클릭 시 모달 열기
     >
       <GridItem src={src} alt={alt} />
-      <ImageCaption style={{ opacity: isHovered ? 1 : 0 }}>
+      <ImageCaption isHovered={isHovered}>
         {caption}
       </ImageCaption>
     </GridItemContainer>
   );
 };
-
 export default function FreePost() {
   const [images, setImages] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  // Replace this function with a real API call
   const fetchImages = async () => {
     const newImages = [
       // 이미지 URL 리스트
@@ -114,6 +168,18 @@ export default function FreePost() {
     console.log('Search:', event.target.value);
     // Implement search functionality here
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedModalImage, setSelectedModalImage] = useState(null);
+
+  const openModal = (imageSrc) => {
+    setSelectedModalImage(imageSrc);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedModalImage(null);
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     fetchImages();
@@ -121,6 +187,7 @@ export default function FreePost() {
 
   return (
     <div>
+      <Header />
       <Container>
         <SearchBar
           type="text"
@@ -138,13 +205,22 @@ export default function FreePost() {
               <ImageWithCaption
                 key={index}
                 src={image}
-                alt="Thumbnail"
-                caption="이미지 설명 텍스트"
+                alt={`Image ${index}`}
+                caption="오늘 산책 인증!!"
+                openModal={openModal}
               />
             ))}
           </Grid>
         </InfiniteScroll>
       </Container>
+      {isModalOpen && (
+        <ModalWrapper onClick={closeModal}>
+          <ModalContent>
+            <ModalImage src={selectedModalImage} alt="Selected Image" />
+            <ModalCloseButton onClick={(e) => e.stopPropagation()}>{'Close'}</ModalCloseButton>
+          </ModalContent>
+        </ModalWrapper>
+      )}
       <MenuBar />
     </div>
   );

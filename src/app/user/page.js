@@ -1,7 +1,9 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import MenuBar from '../MenuBar';
+import Header from '../Header';
+import './user.css';
 import FollowersModal from './FollowersModal'; // FollowersModal을 import
 
 const Container = styled.div`
@@ -66,6 +68,20 @@ const EditProfileButton = styled.button`
   cursor: pointer;
   border-radius: 4px;
 `;
+const EditProfileButton2 = styled.button`
+  background-color: #bbb;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left : 10px;
+`;
 
 const PostTabs = styled.div`
   display: flex;
@@ -91,8 +107,9 @@ const Tab = styled.button`
 
 const Posts = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 10px;
+  width : 100%
 `;
 
 const Post = styled.img`
@@ -103,8 +120,37 @@ export default function User(){
 
   const [activeTab, setActiveTab] = useState('posts');
   const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
+  const [uId, setUId] = useState(''); // 세션값 추가 코드 시작부분
+  const [userPosts, setUserPosts] = useState([]); // 변수 이름 변경
+  useEffect(() => {
+    const savedUId = sessionStorage.getItem('uId');
+    setUId(savedUId);
+
+    // 게시글 출력
+    fetch('/api/post')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('서버 응답이 실패했습니다.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("게시글 ==>", data);
+        setUserPosts(data); // 변수 이름 변경
+      })
+      .catch((error) => {
+        console.error('데이터를 가져오는 중 오류 발생:', error);
+      });
+
+  }, []);
   const handleEditProfile = () => {
     // Implement edit profile logic here
+  };
+  const handleEditProfile2 = () => {
+    if(window.confirm("로그아웃 하시겠습니까?")){
+      sessionStorage.removeItem('uId');
+      window.location.href = '/login';
+    }
   };
   const handleFollowersClick = () => {
     // 팔로워 버튼을 클릭하면 모달을 엽니다.
@@ -112,11 +158,12 @@ export default function User(){
   };
   return (
     <div>
-      <Container>
+      <Header/>
+      <Container className='uContainer'>
         <ProfileHeader>
           <Avatar src="https://via.placeholder.com/150" />
           <UserInfo>
-            <Username>더조은컴퓨터 홍길동</Username>
+            <Username>{uId != null ? uId : "다시 로그인 해주세요."}</Username>
             <Bio>Photographer and traveler</Bio>
             <Stats>
               <a href="#">
@@ -141,48 +188,61 @@ export default function User(){
             <EditProfileButton onClick={handleEditProfile}>
               Edit Profile
             </EditProfileButton>
+            <EditProfileButton2 onClick={handleEditProfile2}>
+              Logout
+            </EditProfileButton2>
           </UserInfo>
         </ProfileHeader>
         <PostTabs>
-      <Tab
-        active={activeTab === 'posts'}
-        onClick={() => setActiveTab('posts')}
-      >
-        Posts
-      </Tab>
-      <Tab
-        active={activeTab === 'saved'}
-        onClick={() => setActiveTab('saved')}
-      >
-        Saved
-      </Tab>
-    </PostTabs>
-    {activeTab === 'posts' && (
-      <Posts>
-        {/* Replace the src attribute with the user's actual post image URLs */}
-        <Post src="https://via.placeholder.com/300" />
-        <Post src="https://via.placeholder.com/300" />
-        <Post src="https://via.placeholder.com/300" />
-        {/* Add more posts as needed */}
-      </Posts>
-    )}
-    {activeTab === 'saved' && (
-      <Posts>
-        {/* Replace the src attribute with the user's actual saved post image URLs */}
-        <Post src="https://via.placeholder.com/300" />
-        <Post src="https://via.placeholder.com/300" />
-        <Post src="https://via.placeholder.com/300" />
-        {/* Add more saved posts as needed */}
-      </Posts>
-    )}
-  </Container>
+          <Tab
+            active={activeTab === 'posts'}
+            onClick={() => setActiveTab('posts')}
+          >
+            Posts
+          </Tab>
+          <Tab
+            active={activeTab === 'saved'}
+            onClick={() => setActiveTab('saved')}
+          >
+            Saved
+          </Tab>
+        </PostTabs>
 
-    {/* 팔로워 모달 */}
-    {isFollowersModalOpen && (
+        <div className="post-grid">
+          {userPosts.map((post) => (
+            <div key={post.P_NO} className="post-item">
+              {activeTab === 'posts' && Array.isArray(post) && (  // Check if post is an array
+                <Posts>
+                  {post
+                    .filter((filteredPost) => uId === filteredPost.U_ID) // Use filteredPost instead of post
+                    .map((filteredPost) => (
+                      <Post
+                        key={filteredPost.PF_NO}
+                        src={`/files/posts/${filteredPost.PF_NO}`}
+                      />
+                    ))}
+                </Posts>
+              )}
+              {activeTab === 'saved' && (
+                <Posts>
+                  {/* Replace the src attribute with the user's actual saved post image URLs */}
+                  <Post src="https://via.placeholder.com/300" />
+                  <Post src="https://via.placeholder.com/300" />
+                  <Post src="https://via.placeholder.com/300" />
+                  {/* Add more saved posts as needed */}
+                </Posts>
+              )}
+            </div>
+          ))}
+        </div>
+      </Container>
+
+      {/* 팔로워 모달 */}
+      {isFollowersModalOpen && (
         <FollowersModal onClose={() => setIsFollowersModalOpen(false)} />
       )}
 
-  <MenuBar />
-</div>
-  )
+      <MenuBar />
+    </div>
+  );
 }

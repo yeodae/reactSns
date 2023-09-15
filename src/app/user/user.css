@@ -1,0 +1,34 @@
+/* CSS */
+.uContainer{
+    width: 1250px;
+    margin: 0 auto;
+    border: 1px solid rgba(219,219,219);
+    margin-top: 30px;
+
+}
+.post-grid {
+    display: flex;
+    flex-wrap: wrap; /* 이미지가 가로로 나열되고 새로운 열로 내려가도록 설정 */
+    gap: 10px;
+  }
+  
+  .post-item {
+    width: 400px; /* 원하는 가로 크기로 설정 */
+    height: 400px; /* 원하는 세로 크기로 설정 */
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    overflow: hidden;
+    margin-bottom: 10px; /* 사진 사이의 간격을 조절할 수 있습니다. */
+    display: flex; /* 이미지를 가운데 정렬하기 위해 flex 컨테이너로 설정 */
+    align-items: center; /* 이미지를 수직으로 가운데 정렬 */
+    justify-content: center; /* 이미지를 수평으로 가운데 정렬 */
+  }
+  
+  .post-item img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    object-fit: cover; /* 이미지를 박스에 꽉 채우도록 설정 */
+  }
+  

@@ -1,13 +1,12 @@
-// db테스트 파일(호출, src/app/dbtest/page.js)
 "use client"
 import React, { useState, useEffect } from 'react';
 
 export default function Search(){
   const [posts, setPosts] = useState([]);
+  var [fileData, setFileData] = useState(null);
   var param1 = "test";
   useEffect(() => {
     fetch(`/api/user?param1=${param1}`) // API 라우트를 호출
-    // param1 파람값 보내는 방법 
       .then((response) => {
         if (!response.ok) {
           throw new Error('서버 응답이 실패했습니다.');
@@ -23,22 +22,30 @@ export default function Search(){
       });
   }, [param1]);
 
+  const onUpload = (e)=>{
+    const file = e.target.files[0];
+    setFileData(file);
+  }
   return (
     <div>
      <div>리스트 출력</div>
+     <div><input type="file" onChange={onUpload} /></div>
      <ul>
         {posts.map((post) => (
           <li key={post.id}>{post.name}</li>
         ))}
       </ul>
-      <button onClick={() => {
-        fetch('/api/user', {
+      <button onClick={async (e) => {
+        var formData = new FormData();
+        formData.append('value1', 'test');
+        if(fileData != null){
+          formData.append('fileData', fileData);
+        }
+
+        await fetch('/api/user', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ value1: '박철수', value2 : '서울'}), // JSON 데이터를 전송합니다.
-        }) // 여러개 보낼때 body 옆에 계속 추가하면된다.
+          body: formData
+        })
           .then((response) => {
             if (!response.ok) {
               throw new Error('서버 응답이 실패했습니다.');
@@ -55,8 +62,8 @@ export default function Search(){
 
       <button onClick={()=>{
         const updatedData = {
-          id: 2, // id
-          name: '박철수',
+          id: 2,
+          name: '김철수',
         };
         
         fetch(`/api/user`, {
