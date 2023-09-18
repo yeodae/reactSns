@@ -156,7 +156,7 @@ export default function FreePost() {
       'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA3MDlfMjAz%2FMDAxNjg4ODkxMjY1Mzgy.TS6uKG7aQspwcCDCJ5sXlf_z8uxeBPYeq7FDtIH6q00g.WHiVTOqJss5Wp9tx_3gAdk0T5J9n5A0oDcp8gEKvQ3Eg.JPEG.ijs960529%2FIMG_9824.JPG&type=sc960_832',
       'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAyMTZfMyAg%2FMDAxNjc2NTUwODYxMjU4.n8LF90e21p4JiYiJ26lvXqQMTh4bKMk6ix1Ulnp68Hgg.RR1H19R0WdKLyok7r1cvNVLGLKwR0T57wcqPElB7AdAg.JPEG.monge0264%2FIMG_1729.jpg&type=sc960_832',
       'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA3MDNfNzcg%2FMDAxNjg4Mzg3MDYwMjIz.yIytn_-vBRc3NLfLuBSwLp4IgN9XIWi-O2uqvVkaeNsg.oQtMKpdPvAPV2igeLJwpqIjAWAhoeUK4T6pk4sYOyDYg.JPEG.dhrkfl88%2F20230703%25A3%25DF184145.jpg&type=sc960_832',
-      'https://via.placeholder.com/150',
+  
     ];
 
     setImages((prevImages) => [...prevImages, ...newImages]);
@@ -189,6 +189,7 @@ export default function FreePost() {
     <div>
       <Header />
       <Container>
+        <h2>자유 산책 게시판</h2>
         <SearchBar
           type="text"
           placeholder="Search for users or hashtags..."

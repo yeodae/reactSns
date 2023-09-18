@@ -67,6 +67,7 @@
   .stories {
     display: flex;
     overflow-x: auto;
+    width: 100%;
     padding: 1rem 0; /* 위아래 여백 추가 (선택사항) */
     justify-content: center; /* 스토리 아이템을 가로로 중앙에 정렬합니다. */
   }

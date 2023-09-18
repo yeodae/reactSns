@@ -5,6 +5,7 @@ import MenuBar from '../MenuBar';
 import Header from '../Header';
 import './user.css';
 import FollowersModal from './FollowersModal'; // FollowersModal을 import
+import PostModal from './PostModal'; // PostModal을 import
 
 const Container = styled.div`
   padding: 20px;
@@ -31,6 +32,7 @@ const Username = styled.h2`
 `;
 
 const Bio = styled.p`
+  font-size : 14px;
   margin: 0;
 `;
 
@@ -43,7 +45,8 @@ const Stats = styled.ul`
 
 const StatItem = styled.li`
   margin-right: 20px;
-
+  text-align : center;
+  margin-top : 10px;
   &:last-child {
     margin-right: 0;
   }
@@ -53,7 +56,10 @@ const StatValue = styled.strong`
   display: block;
 `;
 
-const StatLabel = styled.span``;
+const StatLabel = styled.span`
+  padding : 10px;
+  font-size : 14px;
+`;
 
 const EditProfileButton = styled.button`
   background-color: #4caf50;
@@ -117,17 +123,20 @@ const Post = styled.img`
   object-fit: cover;
 `;
 export default function User(){
-
+  const [user, setUser] = useState([]);
+  const [comment, setComment] = useState([]);
   const [activeTab, setActiveTab] = useState('posts');
   const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
   const [uId, setUId] = useState(''); // 세션값 추가 코드 시작부분
   const [userPosts, setUserPosts] = useState([]); // 변수 이름 변경
+  const [selectedPost, setSelectedPost] = useState(null); // 선택한 게시물 추가
+
   useEffect(() => {
     const savedUId = sessionStorage.getItem('uId');
     setUId(savedUId);
 
     // 게시글 출력
-    fetch('/api/post')
+    fetch(`/api/postDetail?uId=${savedUId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('서버 응답이 실패했습니다.');
@@ -141,10 +150,40 @@ export default function User(){
       .catch((error) => {
         console.error('데이터를 가져오는 중 오류 발생:', error);
       });
+    //댓글출력
+    fetch('/api/comment')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('서버 응답이 실패했습니다.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("댓글 ==>",data);
+        setComment(data);
+      })
+      .catch((error) => {
+        console.error('데이터를 가져오는 중 오류 발생:', error);
+      }); 
+    //유저테이블 출력
+    fetch('/api/user')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('서버 응답이 실패했습니다.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("home/user ==>",data);
+        setUser(data);
+      })
+      .catch((error) => {
+        console.error('데이터를 가져오는 중 오류 발생:', error);
+      });
 
   }, []);
   const handleEditProfile = () => {
-    // Implement edit profile logic here
+    window.location.href = '/profile';
   };
   const handleEditProfile2 = () => {
     if(window.confirm("로그아웃 하시겠습니까?")){
@@ -156,32 +195,41 @@ export default function User(){
     // 팔로워 버튼을 클릭하면 모달을 엽니다.
     setIsFollowersModalOpen(true);
   };
+  const handlePostClick = (post) => {
+    setSelectedPost(post);
+  };
   return (
     <div>
       <Header/>
       <Container className='uContainer'>
         <ProfileHeader>
-          <Avatar src="https://via.placeholder.com/150" />
+        <Avatar
+  src={
+    userPosts.length > 0 && userPosts[0].profile
+      ? `/files/posts/${userPosts[0].profile}`
+      : "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA4MTlfMTE4%2FMDAxNjkyMzk1MjU1MDg4.BymuAbE_wepgAb9T7GXelEtxs5livMt4ONbPjWJyLnYg.KvIS2ZwjfOydOaVJg3K9y2aQZ4hDW4fhWAPCOFqfthUg.PNG.jjungaang%2Fpfp%25A3%25DFlightgrey%25A3%25DFuzubaong.png&type=sc960_832"
+  }
+/>      
           <UserInfo>
-            <Username>{uId != null ? uId : "다시 로그인 해주세요."}</Username>
-            <Bio>Photographer and traveler</Bio>
+            <Username>{uId != null ? uId : "로그인이 필요합니다."}</Username>
+            <Bio>산책하는 사람</Bio>
             <Stats>
               <a href="#">
                 <StatItem>
-                  <StatValue>150</StatValue>
-                  <StatLabel>Posts</StatLabel>
+                  <StatValue>14</StatValue>
+                  <StatLabel>게시물</StatLabel>
                 </StatItem>
               </a>
               <a href="#" onClick={handleFollowersClick}>
                 <StatItem>
-                  <StatValue>300</StatValue>
-                  <StatLabel>Followers</StatLabel>
+                  <StatValue>93</StatValue>
+                  <StatLabel>팔로워</StatLabel>
                 </StatItem>
               </a>
               <a href="#" onClick={handleFollowersClick}>
                 <StatItem>
-                  <StatValue>200</StatValue>
-                  <StatLabel>Following</StatLabel>
+                  <StatValue>104</StatValue>
+                  <StatLabel>팔로잉</StatLabel>
                 </StatItem>
               </a>
             </Stats>
@@ -209,19 +257,17 @@ export default function User(){
         </PostTabs>
 
         <div className="post-grid">
-          {userPosts.map((post) => (
-            <div key={post.P_NO} className="post-item">
-              {activeTab === 'posts' && Array.isArray(post) && (  // Check if post is an array
-                <Posts>
-                  {post
-                    .filter((filteredPost) => uId === filteredPost.U_ID) // Use filteredPost instead of post
-                    .map((filteredPost) => (
-                      <Post
-                        key={filteredPost.PF_NO}
-                        src={`/files/posts/${filteredPost.PF_NO}`}
-                      />
-                    ))}
-                </Posts>
+          {userPosts.map((post,comment) => (
+            <div key={post.P_NO} className="post-item" onClick={() => handlePostClick(post,comment)}>
+              {activeTab === 'posts' && (  // Check if post is an array
+              <Posts>
+                <Post
+                  key={post.PF_NO}
+                  src={`/files/posts/${post.PF_NO}`}
+                />
+              </Posts>
+            
+             
               )}
               {activeTab === 'saved' && (
                 <Posts>
@@ -241,8 +287,11 @@ export default function User(){
       {isFollowersModalOpen && (
         <FollowersModal onClose={() => setIsFollowersModalOpen(false)} />
       )}
-
+       {/* 게시물 모달 */}
+       {selectedPost && (
+        <PostModal post={selectedPost} onClose={() => setSelectedPost(null)} />
+      )}
       <MenuBar />
     </div>
-  );
+  );0
 }

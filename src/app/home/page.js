@@ -15,6 +15,8 @@ export default function Home(){
   const [comment, setComment] = useState([]);
   const [uId, setUId] = useState('');
   const [clicked, setClicked] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLinkCopied, setIsLinkCopied] = useState(false);
 
   const router = useRouter();
   // Replace this function with a real API call
@@ -111,6 +113,20 @@ export default function Home(){
       console.error('좋아요 업데이트 중 오류 발생:', error);
     });
 };
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+      setIsModalOpen(false);
+    };
+
+    const copyLink = () => {
+      const currentUrl = window.location.href;
+      navigator.clipboard.writeText(currentUrl).then(() => {
+        setIsLinkCopied(true); // 복사가 성공하면 상태를 업데이트합니다.
+      });
+    };
 
 
   return (
@@ -130,7 +146,7 @@ export default function Home(){
           <Post key={post.P_NO}>
             <PostHeader>        
               <User>
-                <Avatar src={post.profile} alt={post.U_ID} />
+                <Avatar src={`/files/posts/${post.profile}`} />
                 <Username>{post.U_ID}</Username>
               </User>
             </PostHeader>
@@ -144,8 +160,24 @@ export default function Home(){
               </ActionButton>
 
 
-              <ActionButton>💬</ActionButton>
-              <ActionButton>🔗</ActionButton>
+              <ActionButton
+                onClick={() => {
+                  document.querySelector(`#commentBox-${post.P_NO}`).focus();
+                }}
+              >
+                💬
+              </ActionButton>
+              <ActionButton
+                onClick={() => {
+                  const currentUrl = window.location.href;
+                  navigator.clipboard.writeText(currentUrl).then(() => {                    
+                    window.alert(`링크가 복사되었습니다.`);
+                  });
+                }}
+              >
+                🔗
+              </ActionButton>
+
             </PostActions>
             <Content>
               <div>
@@ -213,7 +245,7 @@ export default function Home(){
                   console.error('POST 요청 중 오류 발생:', error);
                 });
             }}>
-            <input className='commentBox' type='text' name="comment" placeholder='댓글 달기...'></input>
+            <input id={`commentBox-${post.P_NO}`} className='commentBox' type='text' name="comment" placeholder='댓글 달기...'></input>
             <label><PiChatCenteredDots className='icon'/><input type='submit' value=" "/></label>
             </form>
             </Content>

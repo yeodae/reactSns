@@ -17,6 +17,7 @@ export default function Join() {
       var name = e.target.name.value;
       var name2 = e.target.name2.value;
       var pw = e.target.pw.value;
+      var profile = "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA4MTlfMTE4%2FMDAxNjkyMzk1MjU1MDg4.BymuAbE_wepgAb9T7GXelEtxs5livMt4ONbPjWJyLnYg.KvIS2ZwjfOydOaVJg3K9y2aQZ4hDW4fhWAPCOFqfthUg.PNG.jjungaang%2Fpfp%25A3%25DFlightgrey%25A3%25DFuzubaong.png&type=sc960_832";
 
       //조건식 거는부분 
       if (!email || !name || !name2 || !pw) {
@@ -29,7 +30,7 @@ export default function Join() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: email, pw : pw, name : name, name2 : name2}), // JSON 데이터를 전송합니다.
+        body: JSON.stringify({ email: email, pw : pw, name : name, name2 : name2, profile : profile}), // JSON 데이터를 전송합니다.
       }) // 여러개 보낼때 body 옆에 계속 추가하면된다.
         .then((response) => {
           if (!response.ok) {

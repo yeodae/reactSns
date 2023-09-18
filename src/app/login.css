@@ -20,7 +20,7 @@
 .loginBox3 div a{
     width: 80%;
     height: 40px;
-    background-color: #00FF00;
+    background-color: #03c75a;
     margin: 0 auto;
     border-radius: 5px;
     color: white;
@@ -38,3 +38,12 @@
     border-top: 1px solid rgb(219, 219, 219);
     padding: 20px;
 }
+input[type="file"]{
+    border: none; /* 모든 테두리 제거 */
+    background-color: transparent;
+  }
+input[type="submit"]:hover{
+    border: none; /* 모든 테두리 제거 */
+    background-color: #eee;
+    font-weight: bold;
+  }

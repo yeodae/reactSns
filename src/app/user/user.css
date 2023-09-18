@@ -31,4 +31,20 @@
     background-size: cover;
     object-fit: cover; /* 이미지를 박스에 꽉 채우도록 설정 */
   }
-  
+  .postModalbox{
+    padding: 10px;
+    float: left;
+    width: 100%;
+  }
+  .postModalbox span{
+    margin-left: 20px;
+  }
+  .postModalbox div{
+    margin-top: 10px;
+    color: #ccc;
+  }
+  .modalImg{
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+  }
