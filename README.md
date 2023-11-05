@@ -1,10 +1,4 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=　&fontSize=90" />
-<p align="center">
-  <img src="https://github.com/dkth1122/Project_4/assets/130977379/8968344a-101a-4679-8437-072d769dd9b1" />
-</p>
-
-
-
 
 # ✨ 우리동네 산책SNS 
 
@@ -44,13 +38,11 @@
 * 프로세서 : Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
 * JDK : JDK 17
 * 개발 언어 :
-  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
   <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
-  <img src="https://img.shields.io/badge/jquery-0769AD?style=for-the-badge&logo=jquery&logoColor=white">
   <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
-  <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
-  <img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> 
-  <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
+  <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+  <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> 
+  <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
   
 * 데이터베이스:
   <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
@@ -60,29 +52,23 @@
   <br>
   
 ## ⚙ 주요 기능
-📌 
-📌
-📌
-<br>
-<br>
-
-## ⭐ 기능구성도 & DB
-* [기능구성도](https://drive.google.com/file/d/1YVbafDYtbUF3zjZuIKDW-eFUfzRtuqZt/view?usp=drive_link)
-* [DB설계1](https://drive.google.com/file/d/1-0ZQbZotIDBZHoZvCmQhFc9JKl1s5Zkr/view?usp=drive_link)
-* [DB설계2](https://drive.google.com/file/d/1rRmrYK_do-hvVV3dPpRk6d8YdI1CmjHa/view?usp=drive_link)
-* [DB설계3](https://drive.google.com/file/d/1EChgRBclj7dWKB81JS8mIEMgWbfJNpDg/view?usp=drive_link)
-<br>
-<br>
-
-## [📺 시연 영상](https://www.youtube.com/watch?v=QXB6QWtbodI)
-<br>
-
-
-## [💾 발표 PPT](https://drive.google.com/file/d/1rG5kZhM1EaDUcfW3BLHAX0UXETSJoOiq/view?usp=drive_link)
+### 📌 커뮤니티
+* 게시글 등록과 썸네일
+* 댓글과 좋아요
+### 📌 회원가입 / 로그인 / ID,PW찾기
+### 📌 메인홈
+* 유저간 커뮤니티 기능
+* 알림
+* 산책인증 자유게시판
+* 검색게시판
+### 📌 마이페이지
+* 회원 정보 수정
+* 나의 게시글
+* 팔로우
+<br><br>
+## ⭐ [화면 구성도 & DB] 💾PPT : https://drive.google.com/file/d/1IKmnowClwiDWCldARyNqBlwNxaoiit04/view?usp=drive_link
 <br>
 
-## [💾 Mysql sql문](https://drive.google.com/file/d/1p2fX7tVw0cZz6_HYXW37GWAoF2mk28dh/view?usp=drive_link)
-<br>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=footer&text=&fontSize=90" />
 
